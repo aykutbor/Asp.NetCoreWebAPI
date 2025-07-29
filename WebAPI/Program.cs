@@ -1,11 +1,22 @@
+using Business.Abstracts;
+using Business.Concretes;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+/*
+    Singleton => Üretilen baðýmlýlýk uygulama açýk olduðu sürece tek bir kere newlenir. Her enjeksiyonda o instance kullanýlýr.
+   
+    Scoped => (API isteði) Ýstek baþýna 1 instance oluþturur.
+
+    Transient => Her adýmda (her talepte) yeni 1 instance. Her constructor oluþturduðumuzda yeniden oluþturur.
+ */
+builder.Services.AddSingleton<IProductService, ProductManager>();
 
 var app = builder.Build();
 

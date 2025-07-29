@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Business.Abstracts;
+using Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -7,33 +9,24 @@ namespace WebAPI.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
+        IProductService productService;
+
+        public ProductsController(IProductService productService)
+        {
+            this.productService = productService;
+        }
+
         [HttpGet]
-        public string Hello([FromQuery]  string name, [FromQuery] string surname)   // url de tanımlanırken ad=ahmet&soyad=dev şeklinde yazılır.
+        public List<Product> GetAll()
         {
-            return "Hello" + name + "" + surname;
-        }
-
-        [HttpGet("tobeto")]
-        public string Tobeto()
-        {
-            return "Tobeto";
-        }
-
-        [HttpGet("{username}")]
-        public string Course([FromRoute]string username)
-        {
-            return "Course";
+           return productService.GetAll();
         }
 
         [HttpPost]
-        public string GoodBye([FromBody] Product product)
+        public void Add([FromBody]  Product product)
         {
-            return "GoodBye";
+            productService.Add(product);
         }
+
     }
 }
-
-// Route Parameters, Query String => Get isteklerinde popüler.
-// Body => POST, PUT.
-// Headers => Yan bilgileri içerir (İstek nereden atıldı? İstek atılırken kullanılan dil neydi? Hangi dil tercih ediliyor? şeklindedir.
- 
