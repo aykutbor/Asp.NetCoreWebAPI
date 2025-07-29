@@ -3,6 +3,7 @@ using Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,7 +25,7 @@ namespace Business.Concretes
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            products.Remove(GetById(id));
         }
 
         public List<Product> GetAll()
@@ -34,12 +35,25 @@ namespace Business.Concretes
 
         public Product GetById(int id)
         {
-            throw new NotImplementedException();
+           var product = products.Find(x => x.Id == id);
+
+            if(product == null)
+            {
+                throw new Exception("Id not found");
+            }
+            return product;
         }
 
         public void Update(Product product)
         {
-            throw new NotImplementedException();
+            if (product == null)
+                throw new ArgumentNullException(nameof(product));
+
+            var existingProdcut = GetById(product.Id);
+
+            existingProdcut.Name = product.Name;
+            existingProdcut.UnitPrice = product.UnitPrice;
+
         }
     }
 }
