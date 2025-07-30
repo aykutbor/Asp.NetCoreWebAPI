@@ -17,6 +17,7 @@ builder.Services.AddSwaggerGen();
     Transient => Her adýmda (her talepte) yeni 1 instance. Her constructor oluþturduðumuzda yeniden oluþturur.
  */
 builder.Services.AddSingleton<IProductService, ProductManager>();
+builder.Services.AddSingleton<ICategoryService, CategoryManager>();
 
 var app = builder.Build();
 
