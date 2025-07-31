@@ -1,4 +1,5 @@
 ﻿using Business.Abstracts;
+using DataAccess.Abstracts;
 using Entities;
 using System;
 using System.Collections.Generic;
@@ -11,37 +12,37 @@ namespace Business.Concretes
 {
     public class ProductManager : IProductService
     {
-        List<Product> products;
+        IProductRepository _productRepository;
 
-        public ProductManager()
+        public ProductManager(IProductRepository productRepository)
         {
-            this.products = new List<Product>();
+            _productRepository = productRepository;
         }
 
         public void Add(Product product)
         {
-            products.Add(product);
+            _productRepository.Add(product);
         }
 
         public void Delete(int id)
         {
-            products.Remove(GetById(id));
+            _productRepository.Delete(id);
         }
 
         public List<Product> GetAll()
         {
-            return this.products;
+            return _productRepository.GetAll();
         }
 
         public Product GetById(int id)
         {
-           var product = products.Find(x => x.Id == id);
+           //var product = _productRepository.GetById(x => x.Id == id);
 
-            if(product == null)
-            {
-                throw new Exception("Id not found");
-            }
-            return product;
+           // if(product == null)
+           // {
+           //     throw new Exception("Id not found");
+           // }
+            return _productRepository.GetById(id);
         }
 
         public void Update(Product product)

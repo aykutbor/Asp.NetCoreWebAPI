@@ -1,5 +1,7 @@
 using Business.Abstracts;
 using Business.Concretes;
+using DataAccess.Abstracts;
+using DataAccess.Concretes.InMemory;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,10 @@ builder.Services.AddSwaggerGen();
  */
 builder.Services.AddSingleton<IProductService, ProductManager>();
 builder.Services.AddSingleton<ICategoryService, CategoryManager>();
+builder.Services.AddSingleton<IProductRepository, InMemoryProductRepository>(); 
+
+// Soyutlama kullandýðýmýz her alanda, o soyutlamanýn karþýlýðý olarak sistemde somut olarak hangisi kullanýlacak bunu belirtmemiz gerekir. Eðer tanýmlanmazsa baðýmlýlýk tanýmlanmadýðý için hata alýnýr.
+
 
 var app = builder.Build();
 
