@@ -24,9 +24,14 @@ namespace Business.Concretes
             _productRepository.Add(product);
         }
 
+        public void Delete(Product product)
+        {
+           _productRepository.Delete(product);
+        }
+
         public void Delete(int id)
         {
-            _productRepository.Delete(id);
+            throw new NotImplementedException();
         }
 
         public List<Product> GetAll()

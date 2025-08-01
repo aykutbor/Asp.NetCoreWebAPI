@@ -12,15 +12,17 @@ namespace Entities
         {
         }
 
-        public Product(int ıd, string name, double unitPrice)
+        public Product(int ıd, string name, double unitPrice, int stock)
         {
             Id = ıd;
             Name = name;
             UnitPrice = unitPrice;
+            Stock = stock;
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
         public double UnitPrice { get; set; }
+        public int Stock {  get; set; }
     }
 }
