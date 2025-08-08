@@ -12,6 +12,7 @@ namespace DataAccess.Concretes.Entity_Framework
     public class BaseDbContext : DbContext
     {
         public DbSet<Product> Products { get; set; } // Tablonun Class karşılığı "Product", Tablo karşılığı "Products"
+        public DbSet<Category> Categories { get; set; }
 
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -25,7 +26,7 @@ namespace DataAccess.Concretes.Entity_Framework
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB; Database=DbWebApi; Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB; Database=DbWebApi2; Trusted_Connection=True;");
             base.OnConfiguring(optionsBuilder);
 
         }

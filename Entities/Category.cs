@@ -12,15 +12,18 @@ namespace Entities
         {
         }
 
-        public Category(int ıd, string name, string description)
+        public Category(int ıd, string name)
         {
             Id = ıd;
             Name = name;
-            Description = description;
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
+        public virtual ICollection<Product> Products { get; set; } 
     }
 }
+
+// virtual, veritabanında gerçekten oluşmayan sanal bir alan için kullanılmıştır.
+
+// NOT: Constructor alanlarda virtual alanlara yer verilmemelidir! Çünkü onlar ilişki sonucu otomatik oluşan alanlardır.

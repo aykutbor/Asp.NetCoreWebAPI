@@ -57,7 +57,6 @@ namespace Business.Concretes
             }
 
             existingCategory.Name = category.Name;
-            existingCategory.Description = category.Description;
         }
     }
 }
