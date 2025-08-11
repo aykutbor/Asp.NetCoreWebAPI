@@ -1,9 +1,11 @@
 ﻿using Business.Abstracts;
+using Core.DataAccess;
 using DataAccess.Abstracts;
 using Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +23,10 @@ namespace Business.Concretes
 
         public void Add(Product product)
         {
+            Product? productWithSameName = _productRepository.Get(p => p.Name == product.Name);
+            if (productWithSameName is not null)
+                throw new Exception("Aynı isimde 2. ürün eklenemez.");
+
             _productRepository.Add(product);
         }
 
@@ -36,18 +42,17 @@ namespace Business.Concretes
 
         public List<Product> GetAll()
         {
-            return _productRepository.GetAll();
+
+            return _productRepository
+             .GetList(p => p.UnitPrice > 100)   // sadece predicate varsa
+             .OrderBy(p => p.Name)              // LINQ ile sırala
+             .ToList();
         }
 
         public Product GetById(int id)
         {
-           //var product = _productRepository.GetById(x => x.Id == id);
+            return _productRepository.Get(p => p.Id == id);
 
-           // if(product == null)
-           // {
-           //     throw new Exception("Id not found");
-           // }
-            return _productRepository.GetById(id);
         }
 
         public void Update(Product product)
