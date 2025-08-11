@@ -19,9 +19,9 @@ builder.Services.AddSwaggerGen();
 
     Transient => Her adýmda (her talepte) yeni 1 instance. Her constructor oluþturduðumuzda yeniden oluþturur.
  */
-builder.Services.AddSingleton<IProductService, ProductManager>();
-builder.Services.AddSingleton<ICategoryService, CategoryManager>();
-builder.Services.AddSingleton<IProductRepository, EfProductRepository>();
+builder.Services.AddScoped<IProductService, ProductManager>();
+builder.Services.AddScoped<ICategoryService, CategoryManager>();
+builder.Services.AddScoped<IProductRepository, EfProductRepository>();
 builder.Services.AddDbContext<BaseDbContext>();
 
 // Soyutlama kullandýðýmýz her alanda, o soyutlamanýn karþýlýðý olarak sistemde somut olarak hangisi kullanýlacak bunu belirtmemiz gerekir. Eðer tanýmlanmazsa baðýmlýlýk tanýmlanmadýðý için hata alýnýr.

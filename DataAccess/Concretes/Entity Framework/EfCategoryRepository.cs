@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concretes.Entity_Framework
 {
-    public class EfProductRepository : EfRepositoryBase<Product, BaseDbContext>, IProductRepository
+    public class EfCategoryRepository : EfRepositoryBase<Category, BaseDbContext> ,ICategoryRepository
     {
-        public EfProductRepository(BaseDbContext context) : base(context)
+        public EfCategoryRepository(BaseDbContext context) : base(context)
         {
         }
     }

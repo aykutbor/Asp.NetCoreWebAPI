@@ -9,7 +9,7 @@ namespace Core.DataAccess
 {
     // Constraints =>Kısıtlar, kullanıcı istediği tipi versin fakat sınırlar içerisinde.
     // TContext tipi kullanıcı tarafından belirlendiği için DbContext olarak belirlenmiştir. Amaç, bağımlılığı azaltmak.
-    public class EfRepositoryBase<TEntity, TContext> : IRepository<TEntity> where TContext : DbContext where TEntity : class, new()
+    public class EfRepositoryBase<TEntity, TContext> : IRepository<TEntity> where TContext : DbContext where TEntity : Entity
     {
         private readonly TContext Context;
 
@@ -35,7 +35,7 @@ namespace Core.DataAccess
             return Context.Set<TEntity>().ToList();
         }
 
-        public TEntity GetById(int id)
+        public TEntity? GetById(int id)
         {
             return Context.Set<TEntity>().FirstOrDefault(i => i.Id == id);
         }
