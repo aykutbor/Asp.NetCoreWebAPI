@@ -17,10 +17,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<List<Product>> GetAll()
         {
-            var result = _productService.GetAll();
-            return Ok(result);
+            return await _productService.GetAll();
         }
 
         [HttpPost("add")]
@@ -48,5 +47,30 @@ namespace WebAPI.Controllers
             _productService.Update(product);
         }
 
+        [HttpGet("Senkron")]
+        public string Sync()
+        {
+            Thread.Sleep(5000); // 5 saniye beklet, ardından bir sonraki satıra geç.
+            return "Sync endpoint";
+        }
+
+        [HttpGet("Asenkron")]
+        public async Task<string> Async()
+        {
+            await Task.Delay(5000); // await ise beklemek istediğimiz işlemler için kullanılır, örnek db'den veri çekilmesi gibi işlemler.
+            return "Async endpoint";
+        }
+
     }
+
 }
+
+// Senkron ve Asenkron
+
+// Senkron => Bir olayın bir metodun çalışma anında bir satırı çalıştırırken o satırı bitirmeden alt satıra geçmemesine senkron işlem denir.
+
+// Asenkron => Bir satırı başlatıp bitmesini beklemeden alt satıra geçebilen ve işlemi bloklamayan yapılara asenkron yapılar denir.
+
+// DipNot: bir asenkron metodun başına await geldiği zaman senkron program gibi çalışır, yani işlemin bitmesini bekler. Yukarıdaki örnekte, sadece Task.Delay(5000) dediğimiz zaman 5 saniye beklemez bir sonraki satıra hemen geçer, ama await Task.Delay(5000) dediğimiz zaman, 5 saniye bekler ondan sonra alt satıra geçer.
+
+// Teknik: Bir asenkron işlem, çalıştığı bilgisayardaki işlemcinin thread'lerinin hepsini bloklamaz await kullanılsa bile. Senkron işlem ise tüm thread'leri blokladığı için önce kendi işleminin bitmesini bekler ondan sonra diğer işlemi çalıştırır.

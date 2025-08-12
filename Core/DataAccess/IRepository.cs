@@ -11,9 +11,11 @@ namespace Core.DataAccess
     public interface IRepository<T>
     {
         T? Get(Expression<Func<T, bool>>? predicate);
-        List<T> GetList(Expression<Func<T, bool>>? predicate); // GetAll, db sorgularında performansı iyileştirmek için fonksiyon kullanır."?" Null özelliği için.
+        List<T> GetList(Expression<Func<T, bool>>? predicate = null); // GetAll, db sorgularında performansı iyileştirmek için fonksiyon kullanır."?" Null özelliği için.
         void Add(T entity);
         void Update(T entity);
         void Delete(T entity);
     }
 }
+
+// = null ifadesi, varsayılan değerdir. GetList metoduna parametre verilmek istenmediği durumlarda kullanılır.
