@@ -22,7 +22,7 @@ namespace Business.Concretes
             _productRepository = productRepository;
         }
 
-        public async void Add(Product product)
+        public async Task Add(Product product)
         {
 
             if(product.UnitPrice < 0)
