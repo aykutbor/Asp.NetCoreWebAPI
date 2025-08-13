@@ -1,4 +1,5 @@
 ﻿using Business.Abstracts;
+using Core.CrossCuttingConcerns.Exceptions.Types;
 using Core.DataAccess;
 using DataAccess.Abstracts;
 using Entities;
@@ -23,9 +24,15 @@ namespace Business.Concretes
 
         public async void Add(Product product)
         {
+
+            if(product.UnitPrice < 0)
+            {
+                throw new BusinessException("Ürün fiyatı 0'dan küçük olamaz.");
+            }
+
             Product? productWithSameName = await _productRepository.GetAsync(p => p.Name == product.Name);
             if (productWithSameName is not null)
-                throw new Exception("Aynı isimde 2. ürün eklenemez.");
+                throw new System.Exception("Aynı isimde 2. ürün eklenemez.");
 
             await _productRepository.AddAsync(product);
         }

@@ -74,3 +74,5 @@ namespace WebAPI.Controllers
 // DipNot: bir asenkron metodun başına await geldiği zaman senkron program gibi çalışır, yani işlemin bitmesini bekler. Yukarıdaki örnekte, sadece Task.Delay(5000) dediğimiz zaman 5 saniye beklemez bir sonraki satıra hemen geçer, ama await Task.Delay(5000) dediğimiz zaman, 5 saniye bekler ondan sonra alt satıra geçer.
 
 // Teknik: Bir asenkron işlem, çalıştığı bilgisayardaki işlemcinin thread'lerinin hepsini bloklamaz await kullanılsa bile. Senkron işlem ise tüm thread'leri blokladığı için önce kendi işleminin bitmesini bekler ondan sonra diğer işlemi çalıştırır.
+
+// Veritabanı işlemleri gibi, dosya okuma yazma gibi, bir trafik içerisinde en çok zaman harcayacağımız yapılarda kullanıyoruz.
