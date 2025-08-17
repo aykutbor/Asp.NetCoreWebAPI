@@ -4,6 +4,10 @@ using Core.CrossCuttingConcerns.Exceptions;
 using Core.CrossCuttingConcerns.Exceptions.Extentions;
 using DataAccess.Abstracts;
 using DataAccess.Concretes.Entity_Framework;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
+using Business;
+using DataAccess;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,10 +25,14 @@ builder.Services.AddSwaggerGen();
 
     Transient => Her adýmda (her talepte) yeni 1 instance. Her constructor oluþturduðumuzda yeniden oluþturur.
  */
-builder.Services.AddScoped<IProductService, ProductManager>();
-builder.Services.AddScoped<ICategoryService, CategoryManager>();
-builder.Services.AddScoped<IProductRepository, EfProductRepository>();
-builder.Services.AddDbContext<BaseDbContext>();
+
+
+builder.Services.AddBusinessServices();
+builder.Services.AddDataAccessServices();
+
+
+
+// Assembly -> Uygulamanýn veya kütüphanenin derlenmiþ kodunu ve bu kodun çalýþtýrýlmasý için gereken bileþenleri içeren yapýdýr. Genellikle DLL'lerdir. AutoMapper eþleme yapacaðý için assembly'e gerek duyar. GetExecutingAssembly, o an sistemin çalýþtýðý kodun çalýþtýðý assembly'i verir.
 
 // Soyutlama kullandýðýmýz her alanda, o soyutlamanýn karþýlýðý olarak sistemde somut olarak hangisi kullanýlacak bunu belirtmemiz gerekir. Eðer tanýmlanmazsa baðýmlýlýk tanýmlanmadýðý için hata alýnýr.
 

@@ -1,8 +1,11 @@
-﻿using Business.Abstracts;
+﻿using AutoMapper;
+using Business.Abstracts;
+using Business.Dtos.Product;
 using Core.CrossCuttingConcerns.Exceptions.Types;
 using Core.DataAccess;
 using DataAccess.Abstracts;
 using Entities;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,30 +19,43 @@ namespace Business.Concretes
     public class ProductManager : IProductService
     {
         IProductRepository _productRepository;
+        IMapper _mapper;
 
-        public ProductManager(IProductRepository productRepository)
+        public ProductManager(IProductRepository productRepository, IMapper mapper)
         {
             _productRepository = productRepository;
+            _mapper = mapper;
         }
 
-        public async Task Add(Product product)
+        public async Task Add(ProductForAddDto dto)
         {
 
-            if(product.UnitPrice < 0)
+            if (dto.UnitPrice < 0)
             {
                 throw new BusinessException("Ürün fiyatı 0'dan küçük olamaz.");
             }
 
-            Product? productWithSameName = await _productRepository.GetAsync(p => p.Name == product.Name);
+            Product? productWithSameName = await _productRepository.GetAsync(p => p.Name == dto.Name);
             if (productWithSameName is not null)
                 throw new System.Exception("Aynı isimde 2. ürün eklenemez.");
 
+            // Manuel Mapping
+            //Product product = new();
+            //product.Name = dto.Name;
+            //product.Stock = dto.Stock;
+            //product.UnitPrice = dto.UnitPrice;
+            //product.CategoryId = dto.CategoryId;
+            //product.CreatedDate = DateTime.Now; // Global'e taşınacak
+
+            // AutoMapping
+
+            Product product = _mapper.Map<Product>(dto);  // Product -> Maplemek istenilen tür, dto -> Verilerin transfer edileceği kaynak
             await _productRepository.AddAsync(product);
         }
 
         public void Delete(Product product)
         {
-           _productRepository.Delete(product);
+            _productRepository.Delete(product);
         }
 
         public void Delete(int id)
@@ -48,15 +64,31 @@ namespace Business.Concretes
             throw new NotImplementedException();
         }
 
-        public async Task<List<Product>> GetAll()
+        public async Task<List<ProductForListingDto>> GetAll()
         {
+            List<Product> products = await _productRepository.GetListAsync();
 
-            return await _productRepository.GetListAsync();
+            //List<ProductForListingDto> response = new List<ProductForListingDto>();
 
-            //return _productRepository
-            // .GetList(p => p.UnitPrice > 100)   // sadece predicate varsa
-            // .OrderBy(p => p.Name)              // LINQ ile sırala
-            // .ToList();
+            //foreach (Product product in products)
+            //{
+            //    ProductForListingDto dto = new();
+            //    dto.Name = product.Name;
+            //    dto.UnitPrice = product.UnitPrice;
+            //    dto.Id = product.Id;
+            //    response.Add(dto);
+            //}
+
+            List<ProductForListingDto> response = products.Select(p => new ProductForListingDto()       // Select, bu listedeki her bir eleman için bir model seç demek.
+            {
+                Id = p.Id,
+                Name = p.Name,
+                UnitPrice = p.UnitPrice,
+            }).ToList(); 
+
+            return response;
+
+            
         }
 
         public Product GetById(int id)
@@ -77,6 +109,6 @@ namespace Business.Concretes
 
         }
 
-       
+
     }
 }
