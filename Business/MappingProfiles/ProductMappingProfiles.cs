@@ -14,15 +14,21 @@ namespace Business.MappingProfiles
         public ProductMappingProfiles()
         {
             CreateMap<Product, ProductForAddDto>().ReverseMap();
+            //   .ForMember(i => i.UnitPrice, opt => opt.MapFrom(dto => dto.Price)); // Özel konfigürasyondur. Entity'deki UnitPrice ile Dto'daki Price'ı mapler.
+            CreateMap<Product, ProductForListingDto>().ReverseMap();
         }
     }
 }
+
+
 // Profile -> İki nesne arasında mapleme yapılacak ama bu nesneleri bir tanımla. Hnagi nesne ile hangi nesne arasında ilişki var.
+
 // Constructor içerisinde, bu profil kuralları tanımlanır.
 
 // CreateMap<TSource, TDestination>(); şeklinde çalışır.
 
 // TSource -> Verileri alacağımız yer.
+
 // TDestination -> Alınan kaynaktan üretilecek class.
 
 // ReverseMap(); -> Her iki yönde de mapleme işlemi gerçekleştirir.

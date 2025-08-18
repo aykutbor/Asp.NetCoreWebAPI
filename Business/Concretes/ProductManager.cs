@@ -68,27 +68,9 @@ namespace Business.Concretes
         {
             List<Product> products = await _productRepository.GetListAsync();
 
-            //List<ProductForListingDto> response = new List<ProductForListingDto>();
-
-            //foreach (Product product in products)
-            //{
-            //    ProductForListingDto dto = new();
-            //    dto.Name = product.Name;
-            //    dto.UnitPrice = product.UnitPrice;
-            //    dto.Id = product.Id;
-            //    response.Add(dto);
-            //}
-
-            List<ProductForListingDto> response = products.Select(p => new ProductForListingDto()       // Select, bu listedeki her bir eleman için bir model seç demek.
-            {
-                Id = p.Id,
-                Name = p.Name,
-                UnitPrice = p.UnitPrice,
-            }).ToList(); 
+            List<ProductForListingDto> response = _mapper.Map<List<ProductForListingDto>>(products);
 
             return response;
-
-            
         }
 
         public Product GetById(int id)
