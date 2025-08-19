@@ -14,6 +14,7 @@ namespace DataAccess
         public static IServiceCollection AddDataAccessServices(this IServiceCollection services)
         {
             services.AddScoped<IProductRepository, EfProductRepository>();
+            services.AddScoped<ICategoryRepository, EfCategoryRepository>();
             services.AddDbContext<BaseDbContext>();
             
             return services;

@@ -14,7 +14,11 @@ namespace Business
     {
         public static IServiceCollection AddBusinessServices(this IServiceCollection services)
         {
+            services.AddMediatR(config => { 
+                config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());  // Uygulamanın tamamındaki request ve request handler'ları bulmak için kullanılır.
+            });
             services.AddScoped<IProductService, ProductManager>();
+            services.AddScoped<ICategoryService, CategoryManager>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             return services;

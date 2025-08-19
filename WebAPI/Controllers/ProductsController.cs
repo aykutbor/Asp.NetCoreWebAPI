@@ -1,7 +1,7 @@
 ﻿using Business.Abstracts;
-using Business.Dtos.Product.Requests;
-using Business.Dtos.Product.Responses;
+using Business.Features.Products.Commands.Create;
 using Entities;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,61 +11,26 @@ namespace WebAPI.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly IProductService _productService;
+        private readonly IMediator _mediator;
 
-        public ProductsController(IProductService productService)
+        public ProductsController(IMediator mediator)
         {
-            _productService = productService;
+            _mediator = mediator;
         }
 
-        [HttpGet]
-        public async Task<List<ListProductResponse>> GetAll()
-        {
-            return await _productService.GetAll();
-        }
+       
 
         [HttpPost("add")]
-        public async Task Add([FromBody] AddProductRequest product)
+        public async Task Add([FromBody] CreateProductCommand command)
         {
-            await _productService.Add(product);
-        }
-
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-            _productService.Delete(id);
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult GetById(int id)
-        {
-            var product = _productService.GetById(id);
-            return Ok(product);
-        }
-
-        [HttpPut]
-        public void Update(Product product)
-        {
-            _productService.Update(product);
-        }
-
-        [HttpGet("Senkron")]
-        public string Sync()
-        {
-            Thread.Sleep(5000); // 5 saniye beklet, ardından bir sonraki satıra geç.
-            return "Sync endpoint";
-        }
-
-        [HttpGet("Asenkron")]
-        public async Task<string> Async()
-        {
-            await Task.Delay(5000); // await ise beklemek istediğimiz işlemler için kullanılır, örnek db'den veri çekilmesi gibi işlemler.
-            return "Async endpoint";
+            await _mediator.Send(command);
         }
 
     }
 
 }
+
+// _mediator.Send(); -> İçerisine mediator'ün beklediği tipte bir request alan, ve bu request'i  mediator'ün doğru noktaya yönlendirerek işlediği bir yapı demektir.
 
 // Senkron ve Asenkron
 

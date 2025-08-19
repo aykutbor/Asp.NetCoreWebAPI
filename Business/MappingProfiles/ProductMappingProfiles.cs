@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using Business.Dtos.Product.Requests;
-using Business.Dtos.Product.Responses;
+using Business.Features.Products.Commands.Create;
 using Entities;
 using System;
 using System.Collections.Generic;
@@ -14,9 +13,9 @@ namespace Business.MappingProfiles
     {
         public ProductMappingProfiles()
         {
-            CreateMap<Product, AddProductRequest>().ReverseMap();
+            CreateMap<Product, CreateProductCommand>().ReverseMap();
             //   .ForMember(i => i.UnitPrice, opt => opt.MapFrom(dto => dto.Price)); // Özel konfigürasyondur. Entity'deki UnitPrice ile Dto'daki Price'ı mapler.
-            CreateMap<Product, ListProductResponse>().ReverseMap();
+            
         }
     }
 }
