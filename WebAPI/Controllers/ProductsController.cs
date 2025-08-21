@@ -1,5 +1,10 @@
 ﻿using Business.Abstracts;
 using Business.Features.Products.Commands.Create;
+using Business.Features.Products.Commands.Delete;
+using Business.Features.Products.Commands.Update;
+using Business.Features.Products.Dtos;
+using Business.Features.Products.Queries.GetById;
+using Business.Features.Products.Queries.GetList;
 using Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -18,14 +23,45 @@ namespace WebAPI.Controllers
             _mediator = mediator;
         }
 
-       
+
 
         [HttpPost("add")]
-        public async Task Add([FromBody] CreateProductCommand command)
+        public async Task<IActionResult> Add([FromBody] CreateProductCommand command)
         {
             await _mediator.Send(command);
+            return Created();
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll([FromQuery] GetListQuery query)
+        {
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpGet("{id}")]                                            // Tek bir veri alınırken FromRoute kullanılır.
+        public async Task<IActionResult> GetById([FromRoute] int id) // FromRoute kullanırken Route olarak verilen değerle parametre aynı isimde olmalı.
+        {
+            GetByIdQuery query = new() { Id = id };
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            DeleteProductCommand command = new() { Id = id };
+            await _mediator.Send(command);
+            return Ok();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] UpdateProductCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
     }
 
 }
