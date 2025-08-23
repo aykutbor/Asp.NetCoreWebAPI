@@ -40,9 +40,16 @@ namespace Core.CrossCuttingConcerns.Exceptions
                     problemDetails.Type = "BusinessException";
                     await context.Response.WriteAsync(JsonSerializer.Serialize(problemDetails)); // Class'ı Json formatında string olarak verir.
                 }
+                else if(exception is ValidationException)
+                {
+                    // Casting
+                    ValidationException validationException = (ValidationException) exception;
+                    ValidationProblemDetails validationProblemDetails = new ValidationProblemDetails(validationException.Errors.ToList());
+                    await context.Response.WriteAsync(JsonSerializer.Serialize(validationProblemDetails));
+                }
                 else
                 {
-                    
+
                     context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 }
 
