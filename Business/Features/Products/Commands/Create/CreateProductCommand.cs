@@ -12,7 +12,7 @@ using ValidationException = Core.CrossCuttingConcerns.Exceptions.Types.Validatio
 
 namespace Business.Features.Products.Commands.Create
 {
-    public class CreateProductCommand : IRequest
+    public class CreateProductCommand : IRequest<CreateProductResponse>
     {
         // Request
         public string Name { get; set; }
@@ -22,7 +22,7 @@ namespace Business.Features.Products.Commands.Create
 
 
 
-        public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand>
+        public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, CreateProductResponse>
         {
             private readonly IProductRepository _productRepository;
             private readonly ICategoryService _categoryService;
@@ -35,7 +35,7 @@ namespace Business.Features.Products.Commands.Create
                 _categoryService = categoryService;
             }
 
-            public async Task Handle(CreateProductCommand request, CancellationToken cancellationToken)
+            public async Task<CreateProductResponse> Handle(CreateProductCommand request, CancellationToken cancellationToken)
              {
                 IValidator<CreateProductCommand> validator = new CreateProductCommandValidator(); 
 
@@ -60,7 +60,12 @@ namespace Business.Features.Products.Commands.Create
 
                 Product product = _mapper.Map<Product>(request);
                 await _productRepository.AddAsync(product);
+
+                CreateProductResponse response =  _mapper.Map<CreateProductResponse>(product);
+                return response;
             }
+
+           
         }
 
     }
