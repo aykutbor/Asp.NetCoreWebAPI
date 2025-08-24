@@ -1,5 +1,6 @@
 ﻿  using AutoMapper;
 using Business.Abstracts;
+using Core.Application.Pipelines.Logging;
 using Core.CrossCuttingConcerns.Exceptions.Types;
 using DataAccess.Abstracts;
 using Entities;
@@ -37,18 +38,7 @@ namespace Business.Features.Products.Commands.Create
 
             public async Task<CreateProductResponse> Handle(CreateProductCommand request, CancellationToken cancellationToken)
              {
-                IValidator<CreateProductCommand> validator = new CreateProductCommandValidator(); 
-
-                //validator.ValidateAndThrow(request); // Kendi exception'ını fırlatır.
-
-                ValidationResult result = validator.Validate(request);  // Validation'ı yapacak, sonucu verecek. Bizim exception'larımızdan uygun olanı seçeriz.
-
-                if (!result.IsValid)
-                {
-                    throw new ValidationException(result.Errors.Select(i => i.ErrorMessage).ToList());
-                }
-
-
+                
                 Product? productWithSameName = await _productRepository.GetAsync(p => p.Name == request.Name);
                 if (productWithSameName is not null)
                     throw new System.Exception("Aynı isimde 2. ürün eklenemez.");

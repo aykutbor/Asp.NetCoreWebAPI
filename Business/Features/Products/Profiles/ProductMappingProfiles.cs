@@ -22,6 +22,7 @@ namespace Business.Features.Products.Profiles
             CreateMap<Product, GetByIdProductResponse>().ReverseMap();
             CreateMap<Product, UpdateProductCommand>().ReverseMap(); // Command ve Query için ayrı ayrı oluşturulur.
             CreateMap<Product, UpdateProductResponse>().ReverseMap();
+            CreateMap<Product, CreateProductResponse>().ReverseMap();
         }
     }
 }
