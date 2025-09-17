@@ -1,0 +1,32 @@
+﻿using MediatR;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Core.Utilities.Hashing
+{
+    public class HashingHelper
+    {
+        public static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            using HMACSHA512 hmac = new();
+
+            passwordSalt = hmac.Key;
+            passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+        }
+
+        public static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using HMACSHA512 hmac = new(passwordSalt); // parametre verdiğimiz zaman Salt'ı key olarak kullanır, yani random oluşturmaz.
+
+            byte[] computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+
+            return computedHash.SequenceEqual(passwordHash);
+        }
+    }
+}
+
+// Hash'leme işlemlerini tek bir noktadan düzenlemek için kullanılır.
