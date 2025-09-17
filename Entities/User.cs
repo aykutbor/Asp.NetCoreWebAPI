@@ -1,0 +1,20 @@
+﻿using Core.DataAccess;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Entities
+{
+    public class User : Entity
+    {
+        public string Email { get; set; }
+        public byte[] PasswordHash { get; set; } // Şifreler hash'lenir.
+        public byte[] PasswordSalt { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+    }
+}
+
+// Plain Text -> Db'de verinin olduğu gibi şifrelenmeden tutulması.

@@ -28,7 +28,7 @@ namespace Business.Features.Products.Profiles
 }
 
 
-// Profile -> İki nesne arasında mapleme yapılacak ama bu nesneleri bir tanımla. Hnagi nesne ile hangi nesne arasında ilişki var.
+// Profile -> İki nesne arasında mapleme yapılacak ama bu nesneleri bir tanımla. Hangi nesne ile hangi nesne arasında ilişki var.
 
 // Constructor içerisinde, bu profil kuralları tanımlanır.
 

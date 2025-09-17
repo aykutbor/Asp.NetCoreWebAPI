@@ -14,6 +14,7 @@ namespace DataAccess.Concretes.Entity_Framework
     {
         public DbSet<Product> Products { get; set; } // Tablonun Class karşılığı "Product", Tablo karşılığı "Products"
         public DbSet<Category> Categories { get; set; }
+        public DbSet<User> Users { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
