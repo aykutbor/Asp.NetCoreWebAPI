@@ -9,6 +9,12 @@ using System.Reflection;
 using Business;
 using DataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Identity;
+using TokenOptions = Core.Utilities.JWT.TokenOptions;
+using Core.Utilities.Encryption;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,13 +43,31 @@ builder.Services.AddDataAccessServices();
 
 // Soyutlama kullandýðýmýz her alanda, o soyutlamanýn karþýlýðý olarak sistemde somut olarak hangisi kullanýlacak bunu belirtmemiz gerekir. Eðer tanýmlanmazsa baðýmlýlýk tanýmlanmadýðý için hata alýnýr.
 
+//******** string securityKey = builder.Configuration.GetSection("TokenOptions").GetValue<string>("SecurityKey"); ********** // -> appsettings.json'dan veya appsetting.development içerisinden veri okumayý saðlar. "Get" metodu TokenOptions'u (section) komple bir bütün olarak alýr içerisindekiler dahil, GetValue ise sadece ilgili kýsmý alýr. 
+
+// Yukarýdaki örnekteki gibi tek tek okumak yerine appsettings.developmentteki veriler bir model olarak oluþturuldu. Bu class sayesinde tek tek okumak yerine doðrudan class üzerinden okunur.
+
+TokenOptions? tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>();
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         // Jwt Konfigürasyonlarý
+        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true, // secret key'e göre imzalanýp imzalanmadýðý kontrol edilir.
+            ValidIssuer = tokenOptions.Issuer,
+            ValidAudience = tokenOptions.Audience,
+            IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
+
+        };
     });
+
+// Token'in validasyon parametreleri belirlenir. .Net, JWT'yi otomatik olarak tanýmlý kodlarla valide etmeye çalýþýyor. Valide ederken kullanacaðý deðerler burada set edilir.
 
 var app = builder.Build();
 
