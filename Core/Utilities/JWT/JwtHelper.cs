@@ -4,13 +4,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Core.Utilities.JWT
 {
-    public class JwtHelper
+    public class JwtHelper : ITokenHelper
     {
 
         private readonly TokenOptions tokenOptions;
@@ -20,15 +21,27 @@ namespace Core.Utilities.JWT
             this.tokenOptions = tokenOptions;
         }
 
-        public string CreateToken(BaseUser user)
+        public AccessToken CreateToken(BaseUser user)
         {
             // Özellikleri oku ve token'i yaz.
             DateTime expirationTime = DateTime.Now.AddMinutes(tokenOptions.ExpirationTime); // Tokenin geçerliliğini yitireceği zamanı ayarlama.
-            SecurityKey key = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey);
+            SecurityKey key = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey); // Token'i imzalayacağımız key. 
 
-            // Token oluştur.
+            SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature); // Giriş bilgileri
 
-            return "";
+            JwtSecurityToken jwt = new JwtSecurityToken(
+                issuer: tokenOptions.Issuer,
+                audience: tokenOptions.Audience,
+                claims: null,
+                notBefore: DateTime.Now,
+                expires: expirationTime,
+                signingCredentials: signingCredentials
+                );
+
+            JwtSecurityTokenHandler jwtSecurityTokenHandler = new();    // JWT'yi string'e çevirir. Çünkü createToken'in tipi string'dir.
+
+            string jwtToken = jwtSecurityTokenHandler.WriteToken(jwt);
+            return new AccessToken() { Token = jwtToken, ExpirationTime = expirationTime };
         }
     }
 }

@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
+using Core;
 using TokenOptions = Core.Utilities.JWT.TokenOptions;
 using Core.Utilities.Encryption;
 
@@ -33,9 +34,12 @@ builder.Services.AddSwaggerGen();
     Transient => Her adýmda (her talepte) yeni 1 instance. Her constructor oluþturduðumuzda yeniden oluþturur.
  */
 
+TokenOptions? tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>();
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddBusinessServices();
 builder.Services.AddDataAccessServices();
+builder.Services.AddCoreServices(tokenOptions);
 
 
 
@@ -47,7 +51,7 @@ builder.Services.AddDataAccessServices();
 
 // Yukarýdaki örnekteki gibi tek tek okumak yerine appsettings.developmentteki veriler bir model olarak oluþturuldu. Bu class sayesinde tek tek okumak yerine doðrudan class üzerinden okunur.
 
-TokenOptions? tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>();
+
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
