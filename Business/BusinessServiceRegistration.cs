@@ -1,5 +1,6 @@
 ﻿using Business.Abstracts;
 using Business.Concretes;
+using Core.Application.Pipelines.Authorization;
 using Core.Application.Pipelines.Logging;
 using Core.Application.Pipelines.Validation;
 using FluentValidation;
@@ -21,6 +22,7 @@ namespace Business
                 config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());  // Uygulamanın tamamındaki request ve request handler'ları bulmak için kullanılır.
                 // Sıralama önemlidir.
                 config.AddOpenBehavior(typeof(LoggingBehavior<,>));
+                config.AddOpenBehavior(typeof(AuthorizationBehavior<,>));
                 config.AddOpenBehavior(typeof(ValidationBehavior<,>)); // <,> kıstas varsa o kıstastak tüm tipleri kabul et anlamına gelir.
             });
             services.AddScoped<IProductService, ProductManager>();

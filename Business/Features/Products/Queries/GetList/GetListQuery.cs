@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.Application.Pipelines.Authorization;
 using DataAccess.Abstracts;
 using Entities;
 using MediatR;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Business.Features.Products.Queries.GetList
 {                               // Mediator Request
-    public class GetListQuery : IRequest<List<GetAllProductResponse>>
+    public class GetListQuery : IRequest<List<GetAllProductResponse>>, ISecuredRequest
     {
         // Request'in istediği alanlar
         public int Page { get; set; }
